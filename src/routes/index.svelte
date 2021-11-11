@@ -153,8 +153,8 @@
     --colour-light: #fafaff; /* ghost white */
     --colour-light-opacity-85: #fafaffd9;
     --colour-dark: #403f4c; /* dark liver */
-    --colour-feature: #f9dc5c; /* dark liver */
-    --colour-alternative: #e84855; /* dark liver */
+    --colour-feature: #f9dc5c; /* naples yellow */
+    --colour-alternative: #e84855; /* red crayola */
     --font-weight-medium: 500;
   }
 
