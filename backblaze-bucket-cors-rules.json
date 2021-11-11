@@ -1,7 +1,8 @@
 [
   {
     "corsRuleName": "development",
-    "allowedOrigins": ["http://localhost:3000"],
+    "allowedOrigins": ["https://localhost.rodneylab.com:3030"],
+    "allowedHeaders": ["content-type", "range"],
     "allowedOperations": ["s3_put"],
     "exposeHeaders": ["x-amz-version-id"],
     "maxAgeSeconds": 3600
