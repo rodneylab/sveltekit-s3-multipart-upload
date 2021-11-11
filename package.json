@@ -2,7 +2,7 @@
   "name": "sveltekit-s3-compatible-storage",
   "version": "0.0.1",
   "scripts": {
-    "dev": "svelte-kit dev --port 3030",
+    "dev": "svelte-kit dev --port 3000 --https",
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "check": "svelte-check",
@@ -17,7 +17,6 @@
     "@aws-sdk/util-format-url": "^3.40.0",
     "@fontsource/libre-franklin": "^4.5.0",
     "@fontsource/rajdhani": "^4.5.0",
-    "@rodneylab/sveltekit-components": "^0.2.4",
     "@sveltejs/kit": "next",
     "cuid": "^2.1.8",
     "dotenv": "^10.0.0",

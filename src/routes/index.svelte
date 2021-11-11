@@ -31,10 +31,10 @@
       }
 
       isSubmitting = true;
-      const { name: key } = files[0];
+      const { name: key, type } = files[0];
 
       // get signed upload URL
-      const response = await fetch('/api/upload-url.json', {
+      const response = await fetch('/api/presigned-urls.json', {
         method: 'POST',
         credentials: 'omit',
         headers: {
@@ -45,7 +45,6 @@
       const json = await response.json();
       const { readSignedUrl, writeSignedUrl } = json;
       downdloadUrl = readSignedUrl;
-      console.log('read: ', readSignedUrl);
 
       // Upload file
       const reader = new FileReader();
@@ -54,7 +53,7 @@
           method: 'PUT',
           body: reader.result,
           headers: {
-            'Content-Type': 'text/plain',
+            'Content-Type': type,
           },
         });
         uploadComplete = true;
@@ -156,7 +155,7 @@
     --colour-dark: #403f4c; /* dark liver */
     --colour-feature: #f9dc5c; /* dark liver */
     --colour-alternative: #e84855; /* dark liver */
-    --font-weight-bold: 700;
+    --font-weight-medium: 500;
   }
 
   .screen-reader-text {
@@ -195,7 +194,7 @@
   .upload-complete {
     margin: 4rem 1rem;
     padding: 1.5rem;
-    border: solid 0.1875rem var(--colour-light);
+    border: solid 0.125rem var(--colour-light);
     border-radius: 0.5rem;
   }
 
@@ -241,12 +240,12 @@
     background: var(--colour-theme);
     cursor: pointer;
     color: var(--colour-light);
-    border: solid 0.125rem var(--colour-light);
+    border: solid 0.0625rem var(--colour-light);
     border-radius: 1.5rem;
     margin-left: 1rem;
     padding: 0.5rem 1.75rem;
     font-size: 1.25rem;
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-medium);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -267,7 +266,6 @@
   button:focus,
   .file-input-label:focus:before {
     background-color: var(--colour-light-opacity-85);
-    border: solid 0.125rem var(--colour-light-opacity-85);
     color: var(--colour-dark);
   }
 

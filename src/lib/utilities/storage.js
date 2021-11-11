@@ -71,16 +71,6 @@ function getS3Client({ s3ApiUrl }) {
   return S3Client;
 }
 
-export async function presignedUrls(key) {
-  try {
-    const { s3ApiUrl } = await authoriseAccount();
-    const { readSignedUrl, writeSignedUrl } = await generatePresignedUrls({ key, s3ApiUrl });
-    return { readSignedUrl, writeSignedUrl };
-  } catch (error) {
-    console.error(`Error generating presigned urls: ${error}`);
-  }
-}
-
 async function generatePresignedUrls({ key, s3ApiUrl }) {
   const Bucket = S3_COMPATIBLE_BUCKET;
   const Key = key;
@@ -92,4 +82,14 @@ async function generatePresignedUrls({ key, s3ApiUrl }) {
   const writeRequest = await createRequest(client, new PutObjectCommand({ Key, Bucket }));
   const writeSignedUrl = formatUrl(await signer.presign(writeRequest));
   return { readSignedUrl, writeSignedUrl };
+}
+
+export async function presignedUrls(key) {
+  try {
+    const { s3ApiUrl } = await authoriseAccount();
+    const { readSignedUrl, writeSignedUrl } = await generatePresignedUrls({ key, s3ApiUrl });
+    return { readSignedUrl, writeSignedUrl };
+  } catch (error) {
+    console.error(`Error generating presigned urls: ${error}`);
+  }
 }
