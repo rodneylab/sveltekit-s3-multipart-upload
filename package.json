@@ -11,9 +11,9 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.40.1",
-    "@aws-sdk/s3-request-presigner": "^3.40.1",
-    "@aws-sdk/util-create-request": "^3.40.0",
+    "@aws-sdk/client-s3": "^3.41.0",
+    "@aws-sdk/s3-request-presigner": "^3.41.0",
+    "@aws-sdk/util-create-request": "^3.41.0",
     "@aws-sdk/util-format-url": "^3.40.0",
     "@fontsource/libre-franklin": "^4.5.0",
     "@fontsource/rajdhani": "^4.5.0",
@@ -27,13 +27,13 @@
     "husky": "^7.0.4",
     "postcss-html": "^1.2.0",
     "prettier": "^2.4.1",
-    "prettier-plugin-svelte": "^2.4.0",
-    "stylelint": "^14.0.1",
+    "prettier-plugin-svelte": "^2.5.0",
+    "stylelint": "^14.1.0",
     "stylelint-a11y": "^1.2.3",
     "stylelint-config-recommended": "^6.0.0",
-    "stylelint-config-standard": "^23.0.0",
-    "svelte": "^3.42.6",
-    "svelte-check": "^2.2.8"
+    "stylelint-config-standard": "^24.0.0",
+    "svelte": "^3.44.1",
+    "svelte-check": "^2.2.9"
   },
   "type": "module"
 }
