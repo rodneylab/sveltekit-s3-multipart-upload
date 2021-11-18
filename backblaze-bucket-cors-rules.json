@@ -4,7 +4,7 @@
     "allowedOrigins": ["https://test.localhost.com:3000"],
     "allowedHeaders": ["content-type", "range"],
     "allowedOperations": ["s3_put"],
-    "exposeHeaders": ["x-amz-version-id"],
+    "exposeHeaders": ["etag", "x-amz-version-id"],
     "maxAgeSeconds": 300
   },
   {
@@ -12,7 +12,7 @@
     "allowedOrigins": ["https://example.com"],
     "allowedHeaders": ["content-type", "range"],
     "allowedOperations": ["s3_put"],
-    "exposeHeaders": ["x-amz-version-id"],
+    "exposeHeaders": ["etag", "x-amz-version-id"],
     "maxAgeSeconds": 3600
   }
 ]

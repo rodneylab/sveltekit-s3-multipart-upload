@@ -10,7 +10,7 @@
   let uploadComplete = false;
   let files = [];
   let errors = { files: null };
-  let downdloadUrl = '';
+  let downloadUrl = '';
   $: filename = files.length > 0 ? files[0].name : '';
 
   function resetForm() {
@@ -23,6 +23,21 @@
     files = event.target.files;
   };
 
+  async function completeMultipartUpload({ key, parts, uploadId }) {
+    try {
+      const response = await fetch('/api/complete-multipart-upload.json', {
+        method: 'POST',
+        credentials: 'omit',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ key, parts, uploadId }),
+      });
+    } catch (error) {
+      console.error(`Error in completeMultipartUpload on / route: ${error}`);
+    }
+  }
+
   const handleSubmit = async () => {
     try {
       if (files.length === 0) {
@@ -31,7 +46,7 @@
       }
 
       isSubmitting = true;
-      const { name: key, type } = files[0];
+      const { name: key, size, type } = files[0];
 
       // get signed upload URL
       const response = await fetch('/api/presigned-urls.json', {
@@ -40,34 +55,66 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ key }),
+        body: JSON.stringify({ key, size }),
       });
       const json = await response.json();
-      const { readSignedUrl, writeSignedUrl } = json;
-      downdloadUrl = readSignedUrl;
-
-      // Upload file
+      const { multipartUploadUrls, partCount, partSize, readSignedUrl, writeSignedUrl, uploadId } =
+        json;
       const reader = new FileReader();
-      reader.onloadend = async () => {
-        await fetch(writeSignedUrl, {
-          method: 'PUT',
-          body: reader.result,
-          headers: {
-            'Content-Type': type,
-          },
-        });
-        uploadComplete = true;
-        isSubmitting = false;
-      };
-      reader.readAsArrayBuffer(files[0]);
+      if (partCount === 1) {
+        downloadUrl = readSignedUrl;
+
+        // Upload (single part) file
+        reader.onloadend = async () => {
+          await fetch(writeSignedUrl, {
+            method: 'PUT',
+            body: reader.result,
+            headers: {
+              'Content-Type': type,
+            },
+          });
+          uploadComplete = true;
+          isSubmitting = false;
+        };
+        reader.readAsArrayBuffer(files[0]);
+      } else {
+        downloadUrl = readSignedUrl;
+        const lastIndex = multipartUploadUrls.length - 1;
+
+        // Upload (multipartpart) file
+        reader.onloadend = async () => {
+          const uploadPromises = multipartUploadUrls.map((element, index) =>
+            fetch(element, {
+              method: 'PUT',
+              body:
+                index !== lastIndex
+                  ? reader.result.slice(index * partSize, (index + 1) * partSize)
+                  : reader.result.slice(index * partSize),
+              headers: {
+                'Content-Type': type,
+                'Content-Length': index !== lastIndex ? partSize : size - index * partSize,
+              },
+            }),
+          );
+          const uploadResults = await Promise.all(uploadPromises);
+          const parts = uploadResults.map((element, index) => ({
+            ETag: element.headers.get('etag'),
+            PartNumber: index + 1,
+          }));
+          await completeMultipartUpload({ parts, key, uploadId });
+          uploadComplete = true;
+          isSubmitting = false;
+        };
+        reader.readAsArrayBuffer(files[0]);
+      }
     } catch (error) {
-      console.log(`Error in handleSubmit on / route: ${error}`);
+      console.error(`Error in handleSubmit on / route: ${error}`);
     }
   };
 </script>
 
 <svelte:head>
-  <title>SvelteKit S3 Compatible Storage</title>
+  <title>SvelteKit S3 Multipart Upload</title>
   <html lang="en-GB" />
   <meta
     name="description"
@@ -76,12 +123,12 @@
 </svelte:head>
 
 <main class="container">
-  <h1>SvelteKit S3 Compatible Storage</h1>
+  <h1>SvelteKit S3 Multipart Upload</h1>
   {#if uploadComplete}
     <section class="upload-complete">
       <h2 class="heading">Upload complete</h2>
       <p class="filename">
-        Download link: <a aria-label={`Download ${filename}`} href={downdloadUrl}>{filename}</a>
+        Download link: <a aria-label={`Download ${filename}`} href={downloadUrl}>{filename}</a>
       </p>
       <div class="button-container">
         <button
@@ -122,7 +169,7 @@
             type="file"
             multiple
             formenctype="multipart/form-data"
-            accept="image/*"
+            accept="image/*,video/*"
             title="File"
             on:change={handleChange}
           />

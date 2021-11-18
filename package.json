@@ -1,5 +1,5 @@
 {
-  "name": "sveltekit-s3-compatible-storage",
+  "name": "sveltekit-s3-multipart-upload",
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev --port 3000 --https",
