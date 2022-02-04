@@ -1,7 +1,7 @@
 import { authoriseAccount, completeMultipartUpload, getS3Client } from '$lib/utilities/storage';
 
-export async function post({ body }) {
-  const { key, parts, uploadId } = body;
+export async function post({ request }) {
+  const { key, parts, uploadId } = await request.json();
 
   try {
     const { s3ApiUrl } = await authoriseAccount();

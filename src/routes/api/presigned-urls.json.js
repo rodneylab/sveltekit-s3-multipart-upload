@@ -6,8 +6,8 @@ import {
   presignedUrls,
 } from '$lib/utilities/storage';
 
-export async function post({ body }) {
-  const { key, size } = body;
+export async function post({ request }) {
+  const { key, size } = await request.json();
 
   try {
     const { absoluteMinimumPartSize, recommendedPartSize, s3ApiUrl } = await authoriseAccount();
