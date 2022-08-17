@@ -1,18 +1,18 @@
 [
-  {
-    "corsRuleName": "development",
-    "allowedOrigins": ["https://test.localhost.com:3000"],
-    "allowedHeaders": ["content-type", "range"],
-    "allowedOperations": ["s3_put"],
-    "exposeHeaders": ["etag", "x-amz-version-id"],
-    "maxAgeSeconds": 300
-  },
-  {
-    "corsRuleName": "production",
-    "allowedOrigins": ["https://example.com"],
-    "allowedHeaders": ["content-type", "range"],
-    "allowedOperations": ["s3_put"],
-    "exposeHeaders": ["etag", "x-amz-version-id"],
-    "maxAgeSeconds": 3600
-  }
+	{
+		"corsRuleName": "development",
+		"allowedOrigins": ["https://test.localhost.com:3000"],
+		"allowedHeaders": ["content-type", "range"],
+		"allowedOperations": ["s3_put"],
+		"exposeHeaders": ["etag", "x-amz-version-id"],
+		"maxAgeSeconds": 300
+	},
+	{
+		"corsRuleName": "production",
+		"allowedOrigins": ["https://example.com"],
+		"allowedHeaders": ["content-type", "range"],
+		"allowedOperations": ["s3_put"],
+		"exposeHeaders": ["etag", "x-amz-version-id"],
+		"maxAgeSeconds": 3600
+	}
 ]
