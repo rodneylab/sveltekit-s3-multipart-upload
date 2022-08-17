@@ -6,7 +6,7 @@ import {
   presignedUrls,
 } from '$lib/utilities/storage';
 
-export async function post({ request }) {
+export async function POST({ request, setHeaders }) {
   const { key, size } = await request.json();
 
   try {
@@ -29,8 +29,12 @@ export async function post({ request }) {
 
             const { readSignedUrl, writeSignedUrl } = await presignedUrls(key);
 
-            return {
-              body: JSON.stringify({
+            setHeaders({
+              'Content-Type': 'application/json',
+            });
+
+            return new Response(
+              JSON.stringify({
                 multipartUploadUrls,
                 partCount,
                 partSize,
@@ -38,26 +42,28 @@ export async function post({ request }) {
                 writeSignedUrl,
                 uploadId,
               }),
-              status: 200,
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            };
+            );
           }
         }
       }
 
       const { readSignedUrl, writeSignedUrl } = await presignedUrls(key);
 
-      return {
-        body: JSON.stringify({ partCount: 1, readSignedUrl, writeSignedUrl }),
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
+      setHeaders({
+        'Content-Type': 'application/json',
+      });
+
+      return new Response(
+        JSON.stringify({
+          partCount: 1,
+          readSignedUrl,
+          writeSignedUrl,
+        }),
+      );
     }
   } catch (error) {
-    console.error(`Error in route api/presigned-urls.json: ${error}`);
+    const message = `Error in route api/presigned-urls.json: ${error}`;
+    console.error(message);
+    throw new Error(message);
   }
 }
