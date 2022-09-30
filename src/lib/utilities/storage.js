@@ -10,10 +10,11 @@ import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
 import { createRequest } from '@aws-sdk/util-create-request';
 import { formatUrl } from '@aws-sdk/util-format-url';
 import cuid from 'cuid';
-
-const S3_COMPATIBLE_BUCKET = process.env['S3_COMPATIBLE_BUCKET_NAME'];
-const S3_COMPATIBLE_ACCOUNT_AUTH_TOKEN = process.env['S3_COMPATIBLE_ACCOUNT_AUTH_TOKEN'];
-const S3_COMPATIBLE_ACCOUNT_ID = process.env['S3_COMPATIBLE_ACCOUNT_ID'];
+import {
+	S3_COMPATIBLE_BUCKET_NAME,
+	S3_COMPATIBLE_ACCOUNT_AUTH_TOKEN,
+	S3_COMPATIBLE_ACCOUNT_ID,
+} from '$env/static/private';
 
 export async function authoriseAccount() {
 	try {
@@ -64,7 +65,7 @@ export async function completeMultipartUpload({ parts, client, key, uploadId }) 
 		const { VersionId: id } = await client.send(
 			new CompleteMultipartUploadCommand({
 				Key: key,
-				Bucket: S3_COMPATIBLE_BUCKET,
+				Bucket: S3_COMPATIBLE_BUCKET_NAME,
 				MultipartUpload: { Parts: parts },
 				UploadId: uploadId,
 			}),
@@ -107,7 +108,7 @@ export async function generatePresignedPartUrls({ client, key, uploadId, partCou
 				client,
 				new UploadPartCommand({
 					Key: key,
-					Bucket: S3_COMPATIBLE_BUCKET,
+					Bucket: S3_COMPATIBLE_BUCKET_NAME,
 					UploadId: uploadId,
 					PartNumber: index + 1,
 				}),
@@ -120,11 +121,11 @@ export async function generatePresignedPartUrls({ client, key, uploadId, partCou
 	const presignPromises = [];
 	uploadPartRequestResults.forEach((element) => presignPromises.push(signer.presign(element)));
 	const presignPromiseResults = await Promise.all(presignPromises);
-	return presignPromiseResults.map((element) => formatUrl(element));
+	return presignPromiseResults.map((element) => console.log({ ...element }) || formatUrl(element));
 }
 
 export async function generatePresignedUrls({ key, s3ApiUrl }) {
-	const Bucket = S3_COMPATIBLE_BUCKET;
+	const Bucket = S3_COMPATIBLE_BUCKET_NAME;
 	const Key = key;
 	const client = getS3Client({ s3ApiUrl });
 
@@ -138,7 +139,7 @@ export async function generatePresignedUrls({ key, s3ApiUrl }) {
 
 export const initiateMultipartUpload = async ({ client, key }) => {
 	const { UploadId: uploadId } = await client.send(
-		new CreateMultipartUploadCommand({ Key: key, Bucket: S3_COMPATIBLE_BUCKET }),
+		new CreateMultipartUploadCommand({ Key: key, Bucket: S3_COMPATIBLE_BUCKET_NAME }),
 	);
 	return uploadId;
 };

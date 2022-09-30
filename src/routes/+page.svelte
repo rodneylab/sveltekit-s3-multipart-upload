@@ -25,7 +25,7 @@
 
 	async function completeMultipartUpload({ key, parts, uploadId }) {
 		try {
-			const response = await fetch('/api/complete-multipart-upload.json', {
+			await fetch('/api/complete-multipart-upload.json', {
 				method: 'POST',
 				credentials: 'omit',
 				headers: {
@@ -60,6 +60,8 @@
 			const json = await response.json();
 			const { multipartUploadUrls, partCount, partSize, readSignedUrl, writeSignedUrl, uploadId } =
 				json;
+
+			multipartUploadUrls.forEach((element) => console.log(`URL: ${element}`));
 			const reader = new FileReader();
 			if (partCount === 1) {
 				downloadUrl = readSignedUrl;
