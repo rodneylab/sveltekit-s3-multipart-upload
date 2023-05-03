@@ -9,12 +9,12 @@ import {
 import { S3RequestPresigner } from '@aws-sdk/s3-request-presigner';
 import { createRequest } from '@aws-sdk/util-create-request';
 import { formatUrl } from '@aws-sdk/util-format-url';
-import cuid from 'cuid';
 import {
 	S3_COMPATIBLE_BUCKET_NAME,
 	S3_COMPATIBLE_ACCOUNT_AUTH_TOKEN,
 	S3_COMPATIBLE_ACCOUNT_ID,
 } from '$env/static/private';
+import { createId } from '@paralleldrive/cuid2';
 
 export async function authoriseAccount() {
 	try {
@@ -87,7 +87,7 @@ export function getS3Client({ s3ApiUrl }) {
 	const credentials = {
 		accessKeyId: S3_COMPATIBLE_ACCOUNT_ID,
 		secretAccessKey: S3_COMPATIBLE_ACCOUNT_AUTH_TOKEN,
-		sessionToken: `session-${cuid()}`,
+		sessionToken: `session-${createId()}`,
 	};
 
 	const S3Client = new S3({
