@@ -6,6 +6,7 @@ import {
 	presignedUrls,
 } from '$lib/utilities/storage';
 
+/** @type {import('./$types').RequestHandler} */
 export async function POST({ request, setHeaders }) {
 	const { key, size } = await request.json();
 

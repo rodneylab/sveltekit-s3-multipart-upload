@@ -1,5 +1,6 @@
 import { authoriseAccount, completeMultipartUpload, getS3Client } from '$lib/utilities/storage';
 
+/** @type {import('./$types').RequestHandler} */
 export async function POST({ request, setHeaders }) {
 	const { key, parts, uploadId } = await request.json();
 
