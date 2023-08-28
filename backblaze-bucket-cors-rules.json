@@ -1,7 +1,7 @@
 [
 	{
 		"corsRuleName": "development",
-		"allowedOrigins": ["https://test.localhost.com:3000"],
+		"allowedOrigins": ["https://test.localhost.com:5173"],
 		"allowedHeaders": ["content-type", "range"],
 		"allowedOperations": ["s3_put"],
 		"exposeHeaders": ["etag", "x-amz-version-id"],
