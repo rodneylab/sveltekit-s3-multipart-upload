@@ -5,6 +5,7 @@ import {
 	initiateMultipartUpload,
 	presignedUrls,
 } from '$lib/utilities/storage';
+import { error as svelteKitError, fail, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request, setHeaders }) {
@@ -62,9 +63,10 @@ export async function POST({ request, setHeaders }) {
 				}),
 			);
 		}
+		throw svelteKitError(500, 'Server error');
 	} catch (error) {
 		const message = `Error in route api/presigned-urls.json: ${error}`;
 		console.error(message);
-		throw new Error(message);
+		throw error;
 	}
 }
