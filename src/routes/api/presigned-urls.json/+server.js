@@ -5,7 +5,7 @@ import {
 	initiateMultipartUpload,
 	presignedUrls,
 } from '$lib/utilities/storage';
-import { error as svelteKitError, fail, redirect } from '@sveltejs/kit';
+import { error as svelteKitError } from '@sveltejs/kit';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request, setHeaders }) {
